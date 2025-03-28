@@ -1,0 +1,540 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+     .hero {
+        background: url('/static/event_images/dj_party.jpeg');
+        color: white;
+        text-align: center;
+        padding: 100px 20px;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3));
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero h2 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .hero p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        opacity: 0.8;
+    }
+
+    .countdown-timer {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .countdown-item {
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        min-width: 100px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .countdown-item h3 {
+        font-size: 36px;
+        margin: 0;
+        font-weight: bold;
+        line-height: 1.2;
+    }
+
+    .countdown-item p {
+        margin: 5px 0 0;
+        font-size: 14px;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+        .hero h2 {
+            font-size: 32px;
+        }
+
+        .countdown-timer {
+            gap: 10px;
+        }
+
+        .countdown-item {
+            flex-basis: calc(25% - 10px);
+            min-width: 70px;
+            padding: 10px;
+        }
+
+        .countdown-item h3 {
+            font-size: 24px;
+        }
+
+        .countdown-item p {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .countdown-timer {
+            gap: 8px;
+        }
+
+        .countdown-item {
+            flex-basis: calc(25% - 8px);
+            min-width: 60px;
+            padding: 8px;
+        }
+
+        .countdown-item h3 {
+            font-size: 20px;
+        }
+
+        .countdown-item p {
+            font-size: 10px;
+        }
+    }
+
+    /* Rest of the previous CSS remains the same */
+    .events-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 50px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .event-card {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        height: 500px;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.3s ease;
+        background-blend-mode: overlay;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .event-card:hover {
+        transform: scale(1.05);
+    }
+
+    .event-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        padding: 30px;
+        color: white;
+    }
+
+    .event-overlay h3 {
+        font-size: 32px;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .event-btn {
+        display: inline-block;
+        background-color: #ff4081;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .event-btn:hover {
+        background-color: #ff1493;
+    }
+
+    @media (max-width: 768px) {
+        .events-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+ 
+
+
+    /* convenors */
+    .convenors-section, .coordinators-section {
+        background-color: black;
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .convenors-title, .coordinators-title {
+        font-size: 36px;
+        margin-bottom: 30px;
+        color: lightgray;
+        font-weight: 700;
+    }
+
+    .convenors-grid, .coordinators-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .convenor-card, .coordinator-card {
+        background-color: rgb(35, 34, 34);;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .convenor-card:hover, .coordinator-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .convenor-name, .coordinator-name {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #ff4081;
+        font-weight: 600;
+    }
+
+    .convenor-details, .coordinator-details {
+        font-size: 16px;
+        color: lightgray;
+    }
+
+    @media (max-width: 768px) {
+        .convenors-grid, .coordinators-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .convenors-title, .coordinators-title {
+            font-size: 28px;
+        }
+
+        .convenor-card, .coordinator-card {
+            padding: 20px;
+        }
+
+        .convenor-name, .coordinator-name {
+            font-size: 20px;
+        }
+
+        .convenor-details, .coordinator-details {
+            font-size: 14px;
+        }
+    }
+
+
+    /* student */
+
+      /* Previous styles remain the same */
+
+      .student-coordinators-section {
+        background-color: #000;
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .student-coordinators-title {
+        font-size: 36px;
+        margin-bottom: 30px;
+        color: #ff4081;
+        font-weight: 700;
+    }
+
+    .student-coordinators-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .student-coordinator-card {
+        background-color: black;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(255,255,255,0.1);
+        transition: transform 0.3s ease;
+        border: 1px solid #333;
+    }
+
+    
+
+    .student-coordinator-name {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #ff4081;
+        font-weight: 600;
+    }
+
+    .student-coordinator-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #fff;
+    }
+
+    .student-coordinator-department {
+        font-size: 16px;
+        color: lightgrey;
+        margin-bottom: 5px;
+    }
+
+    .student-coordinator-number {
+        font-size: 18px;
+        color: lightgrey;
+    }
+
+    @media (max-width: 1024px) {
+        .student-coordinators-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .student-coordinators-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .student-coordinators-title {
+            font-size: 28px;
+        }
+
+        .student-coordinator-card {
+            padding: 20px;
+        }
+
+        .student-coordinator-name {
+            font-size: 18px;
+        }
+
+        .student-coordinator-details {
+            font-size: 14px;
+        }
+    }
+
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h2>Welcome to Asthra</h2>
+        <div id="countdown" class="countdown-timer">
+            <div class="countdown-item">
+                <h3 id="days">00</h3>
+                <p>Days</p>
+            </div>
+            <div class="countdown-item">
+                <h3 id="hours">00</h3>
+                <p>Hours</p>
+            </div>
+            <div class="countdown-item">
+                <h3 id="minutes">00</h3>
+                <p>Minutes</p>
+            </div>
+            <div class="countdown-item">
+                <h3 id="seconds">00</h3>
+                <p>Seconds</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Convenors Section -->
+<section class="convenors-section">
+    <h2 class="convenors-title">Convenors</h2>
+    <div class="convenors-grid">
+        <div class="convenor-card">
+            <h3 class="convenor-name">Dr. P. Manimaran</h3>
+            <p class="convenor-details">Principal</p>
+        </div>
+        <div class="convenor-card">
+            <h3 class="convenor-name">Dr. S. Padmanaban</h3>
+            <p class="convenor-details">HOD/SSH</p>
+        </div>
+    </div>
+</section>
+
+<section class="coordinators-section">
+    <h2 class="coordinators-title">Event Coordinators</h2>
+    <div class="coordinators-grid">
+        <div class="coordinator-card">
+            <h3 class="coordinator-name">Dr. S. Suthakaran</h3>
+            <p class="coordinator-details">AP/Physics</p>
+            <p class="coordinator-details">Contact: 9526387610</p>
+        </div>
+        <div class="coordinator-card">
+            <h3 class="coordinator-name">Ms. S. Kokila</h3>
+            <p class="coordinator-details">AP/Maths</p>
+            <p class="coordinator-details">Contact: 7359902207</p>
+        </div>
+        <div class="coordinator-card">
+            <h3 class="coordinator-name">Mr. C. Chellapandi</h3>
+            <p class="coordinator-details">AP/English</p>
+            <p class="coordinator-details">Contact: 9994891205</p>
+        </div>
+        <div class="coordinator-card">
+            <h3 class="coordinator-name">Ms. O. A. Sridevi</h3>
+            <p class="coordinator-details">AP/Chemistry</p>
+            <p class="coordinator-details">Contact: 9963940382</p>
+        </div>
+    </div>
+</section>
+<script>
+    // Countdown to 9 April 2025
+    function updateCountdown() {
+        const eventDate = new Date('April 9, 2025 00:00:00').getTime();
+        const now = new Date().getTime();
+        const timeLeft = eventDate - now;
+
+        // Calculate days, hours, minutes, and seconds
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        // Update the countdown elements
+        document.getElementById('days').textContent = days < 10 ? '0' + days : days;
+        document.getElementById('hours').textContent = hours < 10 ? '0' + hours : hours;
+        document.getElementById('minutes').textContent = minutes < 10 ? '0' + minutes : minutes;
+        document.getElementById('seconds').textContent = seconds < 10 ? '0' + seconds : seconds;
+
+        // If the count down is finished
+        if (timeLeft < 0) {
+            clearInterval(countdownTimer);
+            document.getElementById('countdown').innerHTML = "<p>The event is here!</p>";
+        }
+    }
+
+    // Update countdown every second
+    const countdownTimer = setInterval(updateCountdown, 1000);
+
+    // Initial call to display countdown immediately
+    updateCountdown();
+</script>
+
+
+<!-- Events Grid -->
+<section class="events-grid">
+    <!-- Technical Events -->
+    <div class="event-card" style="background-image: url('/media/event_images/technical.jpeg');">
+        <div class="event-overlay">
+            <h3>Technical Events</h3>
+            <a href="{% url 'technical_events' %}" class="event-btn">Explore Events</a>
+        </div>
+    </div>
+
+    <!-- Non-Technical Events -->
+    <div class="event-card" style="background-image:url('/media/event_images/non_technical.jpeg');">
+        <div class="event-overlay">
+            <h3>Non-Technical Events</h3>
+            <a href="{% url 'non_technical_events' %}" class="event-btn">Explore Events</a>
+        </div>
+    </div>
+</section>
+
+<!-- Previous sections remain the same -->
+
+<!-- Student Coordinators Section -->
+<section class="student-coordinators-section">
+    <h2 class="student-coordinators-title">Student Coordinators</h2>
+    <div class="student-coordinators-grid">
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Naveen G</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I AIDS</p>
+                <p class="student-coordinator-number">Contact: 7708626499</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Mohamed Aasim N</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I CSE</p>
+                <p class="student-coordinator-number">Contact: 7812513053</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Wajith Ahmal E</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I CSE</p>
+                <p class="student-coordinator-number">Contact: 9715197186</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Jagan D</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I ECE</p>
+                <p class="student-coordinator-number">Contact: 6364153028</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Kulasekara Rajan G</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I ECE</p>
+                <p class="student-coordinator-number">Contact: 9600705261</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Sharukeshwaran T</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I ECE</p>
+                <p class="student-coordinator-number">Contact: 8300152963</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Kameswaran R</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I EEE</p>
+                <p class="student-coordinator-number">Contact: 6383354647</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Thamim Ansary I</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I IT</p>
+                <p class="student-coordinator-number">Contact: 9626374333</p>
+            </div>
+        </div>
+        <div class="student-coordinator-card">
+            <h3 class="student-coordinator-name">Krishnadev P</h3>
+            <div class="student-coordinator-details">
+                <p class="student-coordinator-department">I MECH</p>
+                <p class="student-coordinator-number">Contact: 9025900507</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
